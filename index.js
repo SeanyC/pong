@@ -172,15 +172,15 @@ window.onload = () => {
     }
 
     // ball hits the left paddle
-    if (ball.x <= (paddle1.x + paddle1.width)) {
-      if (ball.y >= paddle1.y && ball.y + (ball.radius * 2) <= paddle1.y + paddle1.height) {
+    if (ball.x < (paddle1.x + paddle1.width) && ball.x > paddle1.x) {
+      if (ball.y + (ball.radius * 2) > paddle1.y && ball.y < paddle1.y + paddle1.height) {
         ball.speed.x = -ball.speed.x
       }
     }
 
     // ball hits the right paddle
-    if ((ball.x + (ball.radius * 2)) >= paddle2.x) {
-      if (ball.y >= paddle2.y && ball.y + (ball.radius * 2) <= paddle2.y + paddle2.height) {
+    if ((ball.x + (ball.radius * 2)) > paddle2.x && (ball.x + (ball.radius * 2) < (paddle2.x + paddle2.width))) {
+      if (ball.y + (ball.radius * 2) > paddle2.y && ball.y < paddle2.y + paddle2.height) {
         ball.speed.x = -ball.speed.x
       }
     }
