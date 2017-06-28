@@ -17,6 +17,8 @@ window.onload = () => {
       y: -5
     },
     reset: function () {
+      ball.speed.x = -ball.speed.x
+      ball.speed.y = -ball.speed.y
       this.x = (canvas.width / 2) - ballRadius
       this.y = (canvas.height / 2) - ballRadius
     }
@@ -44,6 +46,7 @@ window.onload = () => {
 
   window.addEventListener('keydown', movePaddles)
   window.addEventListener('keyup', stopPaddles)
+  canvas.addEventListener('mousemove', movePaddleWithMouse)
 
   setInterval(() => {
     renderFrame()
@@ -123,6 +126,16 @@ window.onload = () => {
     }
   }
 
+  function movePaddleWithMouse (e) {
+    var rect = canvas.getBoundingClientRect()
+    var root = document.documentElement
+    var mouse = {
+      x: e.clientX - rect.left - root.scrollLeft,
+      y: e.clientY - rect.top - root.scrollTop
+    }
+    paddle1.y = mouse.y - (paddleHeight / 2)
+  }
+
   function renderFrame () {
     // draw the field
     frame.fillStyle = 'black'
@@ -154,8 +167,6 @@ window.onload = () => {
       } else {
         score.player2++
       }
-      ball.speed.x = -ball.speed.x
-      ball.speed.y = -ball.speed.y
       score.update()
       ball.reset()
     }
