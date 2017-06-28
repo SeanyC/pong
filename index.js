@@ -13,7 +13,7 @@ window.onload = () => {
     x: (canvas.width / 2) - ballRadius,
     y: (canvas.height / 2) - ballRadius,
     speed: {
-      x: 10,
+      x: 5,
       y: -5
     },
     reset: function () {
@@ -175,6 +175,8 @@ window.onload = () => {
     if (ball.x < (paddle1.x + paddle1.width) && ball.x > paddle1.x) {
       if (ball.y + (ball.radius * 2) > paddle1.y && ball.y < paddle1.y + paddle1.height) {
         ball.speed.x = -ball.speed.x
+        let deltaY = ball.y - (paddle1.y + paddle1.height / 2)
+        ball.speed.y = deltaY * 0.35
       }
     }
 
@@ -182,6 +184,8 @@ window.onload = () => {
     if ((ball.x + (ball.radius * 2)) > paddle2.x && (ball.x + (ball.radius * 2) < (paddle2.x + paddle2.width))) {
       if (ball.y + (ball.radius * 2) > paddle2.y && ball.y < paddle2.y + paddle2.height) {
         ball.speed.x = -ball.speed.x
+        let deltaY = ball.y - (paddle2.y + paddle2.height / 2)
+        ball.speed.y = deltaY * 0.35
       }
     }
   }
