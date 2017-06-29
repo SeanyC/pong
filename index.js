@@ -139,10 +139,15 @@ window.onload = () => {
   function renderFrame () {
     // draw the field
     frame.fillStyle = 'black'
-    frame.fillRect(0, 0, canvas.width, canvas.height)
+    frame.fillRect(0, 0, canvas.width, canvas.height, 'white')
+
+    // draw the half life
+    frame.fillStyle = 'white'
+    for (var i = 20; i < canvas.height; i += (padding * 2)) {
+      frame.fillRect(canvas.width / 2 - 1, i, 2, padding)
+    }
 
     // draw the ball
-    frame.fillStyle = 'white'
     frame.fillRect(ball.x, ball.y, 10, 10)
 
     // draw the paddles
