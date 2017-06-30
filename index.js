@@ -32,18 +32,27 @@ window.onload = () => {
       this.y = (canvas.height / 2) - settings.ballRadius
     }
   }
-  var paddle1 = {
-    width: 10,
-    height: settings.paddleHeight,
-    x: settings.padding,
-    y: (canvas.height / 2) - (settings.paddleHeight / 2)
+  
+  function Paddle (x, side) {
+    this.width = 10
+    this.height = settings.paddleHeight
+    this.x = x
+    this.y = (canvas.height / 2) - (settings.paddleHeight / 2)
+    if (side === 'left') {
+      this.stickX = function () { ball.x = (this.x + (settings.ballRadius * 2) + (settings.padding / 4)) }
+    } else {
+      this.stickX = function () { ball.x = (this.x - (settings.ballRadius * 2) - (settings.padding / 4)) }
+    }
+    this.stick = function () {
+      ball.speed.x = 0
+      ball.speed.y = 0
+      this.stickX()
+      ball.y = (this.y + (settings.paddleHeight / 2) - (settings.ballRadius))
+    }
   }
-  var paddle2 = {
-    width: 10,
-    height: settings.paddleHeight,
-    x: canvas.width - settings.padding - 10,
-    y: (canvas.height / 2) - (settings.paddleHeight / 2)
-  }
+
+  var paddle1 = new Paddle(settings.padding, 'left')
+  var paddle2 = new Paddle(canvas.width - settings.padding - 10, 'right')
 
   var score = {
     player1: 0,
@@ -186,11 +195,13 @@ window.onload = () => {
     if (ball.x >= canvas.width || ball.x <= 0) {
       if (ball.speed.x > 0) {
         score.player1++
+        paddle2.stick()
       } else {
         score.player2++
+        paddle1.stick()
       }
       score.update()
-      ball.reset()
+      // ball.reset()
     }
 
     // ball hits the left paddle
