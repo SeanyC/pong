@@ -25,12 +25,12 @@ window.onload = () => {
       x: 5,
       y: -5
     },
-    stuck: 0,
-    reset: function () {
-      ball.speed.x = -ball.speed.x
-      ball.speed.y = -ball.speed.y
-      this.x = (canvas.width / 2) - settings.ballRadius
-      this.y = (canvas.height / 2) - settings.ballRadius
+    stuck: false,
+    serve: function () {
+      if (ball.stuck) {
+        ball.stuck.serve()
+        ball.stuck = false
+      }
     }
   }
 
@@ -41,13 +41,19 @@ window.onload = () => {
     this.y = (canvas.height / 2) - (settings.paddleHeight / 2)
     if (side === 'left') {
       this.stickX = function () { ball.x = (this.x + (settings.ballRadius * 2) + (settings.padding / 4)) }
+      this.serveSpeedX = 5
     } else {
       this.stickX = function () { ball.x = (this.x - (settings.ballRadius * 2) - (settings.padding / 4)) }
+      this.serveSpeedX = -5
     }
     this.stick = function () {
       this.stickX()
       ball.y = (this.y + (settings.paddleHeight / 2) - (settings.ballRadius))
       ball.stuck = this
+    }
+    this.serve = function () {
+      ball.speed.x = this.serveSpeedX
+      ball.speed.y = -ball.speed.y
     }
   }
 
@@ -65,6 +71,7 @@ window.onload = () => {
   window.addEventListener('keydown', movePaddles)
   window.addEventListener('keyup', stopPaddles)
   canvas.addEventListener('mousemove', movePaddleWithMouse)
+  canvas.addEventListener('click', ball.serve)
 
   setInterval(() => {
     setPositions()
