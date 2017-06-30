@@ -3,15 +3,24 @@ window.onload = () => {
   const canvas = document.getElementById('game-canvas')
   const frame = canvas.getContext('2d')
 
-  const fps = 60
-  const padding = 20
-  const ballRadius = 5
-  const paddleHeight = 50
+  const settings = {
+    fps: 60,
+    padding: 20,
+    ballRadius: 5,
+    paddleHeight: 50,
+    colors: {
+      background: 'black',
+      text: 'black',
+      paddle: 'white',
+      net: 'white',
+      ball: 'white'
+    }
+  }
 
   var ball = {
     radius: 5,
-    x: (canvas.width / 2) - ballRadius,
-    y: (canvas.height / 2) - ballRadius,
+    x: (canvas.width / 2) - settings.ballRadius,
+    y: (canvas.height / 2) - settings.ballRadius,
     speed: {
       x: 5,
       y: -5
@@ -19,21 +28,21 @@ window.onload = () => {
     reset: function () {
       ball.speed.x = -ball.speed.x
       ball.speed.y = -ball.speed.y
-      this.x = (canvas.width / 2) - ballRadius
-      this.y = (canvas.height / 2) - ballRadius
+      this.x = (canvas.width / 2) - settings.ballRadius
+      this.y = (canvas.height / 2) - settings.ballRadius
     }
   }
   var paddle1 = {
     width: 10,
-    height: paddleHeight,
-    x: padding,
-    y: (canvas.height / 2) - (paddleHeight / 2)
+    height: settings.paddleHeight,
+    x: settings.padding,
+    y: (canvas.height / 2) - (settings.paddleHeight / 2)
   }
   var paddle2 = {
     width: 10,
-    height: paddleHeight,
-    x: canvas.width - padding - 10,
-    y: (canvas.height / 2) - (paddleHeight / 2)
+    height: settings.paddleHeight,
+    x: canvas.width - settings.padding - 10,
+    y: (canvas.height / 2) - (settings.paddleHeight / 2)
   }
 
   var score = {
@@ -51,7 +60,7 @@ window.onload = () => {
   setInterval(() => {
     renderFrame()
     setPositions()
-  }, 1000/fps)
+  }, 1000/settings.fps)
 
   function movePaddles (e) {
     switch (e.key) {
@@ -62,19 +71,19 @@ window.onload = () => {
             if (paddle2.y >= 0) {
               paddle2.y -= 10
             }
-          }, 1000/fps)
+          }, 1000/settings.fps)
         } else if (paddle2.upInterval) {
           clearInterval(paddle2.upInterval)
         }
         break
       case 'ArrowDown':
-        if (paddle2.y <= canvas.height - paddleHeight) {
+        if (paddle2.y <= canvas.height - settings.paddleHeight) {
           if (paddle2.downInterval) { break }
           paddle2.downInterval = setInterval(() => {
-            if (paddle2.y <= canvas.height - paddleHeight) {
+            if (paddle2.y <= canvas.height - settings.paddleHeight) {
               paddle2.y += 10
             }
-          }, 1000/fps)
+          }, 1000/settings.fps)
         } else if (paddle2.downInterval) {
           clearInterval(paddle2.downInterval)
         }
@@ -86,19 +95,19 @@ window.onload = () => {
             if (paddle1.y >= 0) {
               paddle1.y -= 10
             }
-          }, 1000/fps)
+          }, 1000/settings.fps)
         } else if (paddle1.upInterval) {
           clearInterval(paddle1.upInterval)
         }
         break
       case 's':
-        if (paddle1.y <= canvas.height - paddleHeight) {
+        if (paddle1.y <= canvas.height - settings.paddleHeight) {
           if (paddle1.downInterval) { break }
           paddle1.downInterval = setInterval(() => {
-            if (paddle1.y <= canvas.height - paddleHeight) {
+            if (paddle1.y <= canvas.height - settings.paddleHeight) {
               paddle1.y += 10
             }
-          }, 1000/fps)
+          }, 1000/settings.fps)
         } else if (paddle1.downInterval) {
           clearInterval(paddle1.downInterval)
         }
@@ -135,28 +144,30 @@ window.onload = () => {
     }
 
     // make sure paddle will not be clipped by field boundry.
-    if ((mouse.y - (paddleHeight / 2)) < 0 || ((mouse.y - (paddleHeight / 2)) > (canvas.height - paddle1.height))) {
+    if ((mouse.y - (settings.paddleHeight / 2)) < 0 || ((mouse.y - (settings.paddleHeight / 2)) > (canvas.height - paddle1.height))) {
       return
     } else {
-      paddle1.y = mouse.y - (paddleHeight / 2)
+      paddle1.y = mouse.y - (settings.paddleHeight / 2)
     }
   }
 
   function renderFrame () {
     // draw the field
-    frame.fillStyle = 'black'
-    frame.fillRect(0, 0, canvas.width, canvas.height, 'white')
+    frame.fillStyle = settings.colors.background
+    frame.fillRect(0, 0, canvas.width, canvas.height)
 
-    // draw the half life
-    frame.fillStyle = 'white'
-    for (var i = 20; i < canvas.height; i += (padding * 2)) {
-      frame.fillRect(canvas.width / 2 - 1, i, 2, padding)
+    // draw the 'net'
+    frame.fillStyle = settings.colors.net
+    for (var i = 20; i < canvas.height; i += (settings.padding * 2)) {
+      frame.fillRect(canvas.width / 2 - 1, i, 2, settings.padding)
     }
 
     // draw the ball
+    frame.fillStyle = settings.colors.ball
     frame.fillRect(ball.x, ball.y, 10, 10)
 
     // draw the paddles
+    frame.fillStyle = settings.colors.paddle
     frame.fillRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height)
     frame.fillRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height)
   }
