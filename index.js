@@ -133,7 +133,13 @@ window.onload = () => {
       x: e.clientX - rect.left - root.scrollLeft,
       y: e.clientY - rect.top - root.scrollTop
     }
-    paddle1.y = mouse.y - (paddleHeight / 2)
+
+    // make sure paddle will not be clipped by field boundry.
+    if ((mouse.y - (paddleHeight / 2)) < 0 || ((mouse.y - (paddleHeight / 2)) > (canvas.height - paddle1.height))) {
+      return
+    } else {
+      paddle1.y = mouse.y - (paddleHeight / 2)
+    }
   }
 
   function renderFrame () {
@@ -181,7 +187,7 @@ window.onload = () => {
       if (ball.y + (ball.radius * 2) > paddle1.y && ball.y < paddle1.y + paddle1.height) {
         ball.speed.x = -ball.speed.x
         let delta = (ball.y + ball.radius) - (paddle1.y + (paddle1.height / 2))
-        ball.speed.y = delta * 0.35
+        ball.speed.y = delta * 0.30
       }
     }
 
