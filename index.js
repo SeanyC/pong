@@ -25,6 +25,7 @@ window.onload = () => {
       x: 5,
       y: -5
     },
+    stuck: 0,
     reset: function () {
       ball.speed.x = -ball.speed.x
       ball.speed.y = -ball.speed.y
@@ -32,7 +33,7 @@ window.onload = () => {
       this.y = (canvas.height / 2) - settings.ballRadius
     }
   }
-  
+
   function Paddle (x, side) {
     this.width = 10
     this.height = settings.paddleHeight
@@ -44,10 +45,9 @@ window.onload = () => {
       this.stickX = function () { ball.x = (this.x - (settings.ballRadius * 2) - (settings.padding / 4)) }
     }
     this.stick = function () {
-      ball.speed.x = 0
-      ball.speed.y = 0
       this.stickX()
       ball.y = (this.y + (settings.paddleHeight / 2) - (settings.ballRadius))
+      ball.stuck = this
     }
   }
 
@@ -67,8 +67,8 @@ window.onload = () => {
   canvas.addEventListener('mousemove', movePaddleWithMouse)
 
   setInterval(() => {
-    renderFrame()
     setPositions()
+    renderFrame()
   }, 1000/settings.fps)
 
   function movePaddles (e) {
@@ -183,8 +183,12 @@ window.onload = () => {
 
   function setPositions () {
     // set the ball position
-    ball.x += ball.speed.x
-    ball.y += ball.speed.y
+    if (!ball.stuck) {
+      ball.x += ball.speed.x
+      ball.y += ball.speed.y
+    } else {
+      ball.stuck.stick()
+    }
 
     // ball hits top or bottom
     if (ball.y >= canvas.height || ball.y <= 0) {
