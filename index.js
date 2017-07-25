@@ -18,7 +18,8 @@ window.onload = () => {
   }
 
   var ball = {
-    radius: 5,
+    radius: settings.ballRadius,
+    diameter: settings.ballRadius * 2,
     x: (canvas.width / 2) - settings.ballRadius,
     y: (canvas.height / 2) - settings.ballRadius,
     speed: {
@@ -216,21 +217,23 @@ window.onload = () => {
     }
 
     // ball hits the left paddle
-    if (ball.x < (paddle1.x + paddle1.width) && ball.x > paddle1.x) {
-      if (ball.y + (ball.radius * 2) > paddle1.y && ball.y < paddle1.y + paddle1.height) {
+    if (ball.x < paddle1.x + paddle1.width &&
+      ball.x + ball.diameter > paddle1.x &&
+      ball.y < paddle1.y + paddle1.height &&
+      ball.y + ball.diameter > paddle1.y) {
         ball.speed.x = -ball.speed.x
         let delta = (ball.y + ball.radius) - (paddle1.y + (paddle1.height / 2))
         ball.speed.y = delta * 0.30
-      }
     }
 
     // ball hits the right paddle
-    if ((ball.x + (ball.radius * 2)) > paddle2.x && (ball.x + (ball.radius * 2) < (paddle2.x + paddle2.width))) {
-      if (ball.y + (ball.radius * 2) > paddle2.y && ball.y < paddle2.y + paddle2.height) {
+    if (ball.x < paddle2.x + paddle2.width &&
+      ball.x + ball.diameter > paddle2.x &&
+      ball.y < paddle2.y + paddle2.height &&
+      ball.y + ball.diameter > paddle2.y) {
         ball.speed.x = -ball.speed.x
         let delta = (ball.y + ball.radius) - (paddle2.y + (paddle2.height / 2))
         ball.speed.y = delta * 0.30
-      }
     }
   }
 }
