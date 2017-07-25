@@ -47,6 +47,16 @@ window.onload = () => {
       this.stickX = function () { ball.x = (this.x - (settings.ballRadius * 2) - (settings.padding / 4)) }
       this.serveSpeedX = -5
     }
+    this.volley = function () {
+      if (ball.x < this.x + this.width &&
+        ball.x + ball.diameter > this.x &&
+        ball.y < this.y + this.height &&
+        ball.y + ball.diameter > this.y) {
+          ball.speed.x = -ball.speed.x
+          let delta = (ball.y + ball.radius) - (this.y + (this.height / 2))
+          ball.speed.y = delta * 0.30
+      }
+    }
     this.stick = function () {
       this.stickX()
       ball.y = (this.y + (settings.paddleHeight / 2) - (settings.ballRadius))
@@ -198,6 +208,7 @@ window.onload = () => {
       ball.stuck.stick()
     }
 
+    // collision detection
     // ball hits top or bottom
     if (ball.y >= canvas.height || ball.y <= 0) {
       ball.speed.y = -ball.speed.y
@@ -216,24 +227,7 @@ window.onload = () => {
       // ball.reset()
     }
 
-    // ball hits the left paddle
-    if (ball.x < paddle1.x + paddle1.width &&
-      ball.x + ball.diameter > paddle1.x &&
-      ball.y < paddle1.y + paddle1.height &&
-      ball.y + ball.diameter > paddle1.y) {
-        ball.speed.x = -ball.speed.x
-        let delta = (ball.y + ball.radius) - (paddle1.y + (paddle1.height / 2))
-        ball.speed.y = delta * 0.30
-    }
-
-    // ball hits the right paddle
-    if (ball.x < paddle2.x + paddle2.width &&
-      ball.x + ball.diameter > paddle2.x &&
-      ball.y < paddle2.y + paddle2.height &&
-      ball.y + ball.diameter > paddle2.y) {
-        ball.speed.x = -ball.speed.x
-        let delta = (ball.y + ball.radius) - (paddle2.y + (paddle2.height / 2))
-        ball.speed.y = delta * 0.30
-    }
+    paddle1.volley()
+    paddle2.volley()
   }
 }
